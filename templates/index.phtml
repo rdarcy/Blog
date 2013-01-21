@@ -1,0 +1,48 @@
+ <html>
+	<head>
+		
+	</head>
+	<body>
+		{if $rech}
+			<h2>Resultat pour la recherche {$rech} </h2>
+		{else}
+			<h2>Derniers Articles</h2>
+		{/if}
+		{foreach from = $articles item = article}
+			<h3>{$article.titre}</h3>
+			<p>{$article.texte}</p>
+			{if isset($article.image) && !empty($article.image)}
+				<img src="{$article.image}" />
+			{/if}
+			{if !empty($article.tag)}
+				<p>tags: <a href="index.php?&tag={$article.tag}">{$article.tag}</a></p>
+			{/if}
+			<p>{$article.date|date_format:"%A %d/%m/%Y"}</p>
+					
+			{if ( $connecte )}
+				<br><br>
+				<a href="article.php?id={$article.id}" class="btn btn-primary">Modifier</a>
+				<a href="supprimer-article.php?id={$article.id}" class="btn btn-danger"> Supprimer</a>   
+			{/if}
+				
+				<hr>
+			{/foreach}
+			
+			<div class="pagination">
+				<ul>
+					<li class="prev{if $page<=1} disabled{/if}">
+						<a href="?p={if $page<=1}#{else}{$page-1}{/if}{if !empty($rech)}&r={$rech}{/if}{if isset($tag)}&tag={$tag}{/if}">&larr;Precedent</a>
+					</li> <!-- reprensente des "left-arrow" -->
+									
+					{for $i=1 to $nb_pages}<!-- On boucle jusqu a l'avant dernier page-->
+						<li {if $page==$i } class="active"{/if}>
+							<a href="?p={$i}{if !empty($rech)}&r={$rech}{/if}{if !empty($tag)}&tag={$tag}{/if}">{$i}</a>
+						</li>						
+					{/for}<!-- On arrete de boucler --> 
+					<li class="next{if $page>=$nb_pages} disabled{/if}">
+						<a href="?p={if $page!=$nb_pages}{$page+1}{else}#{/if}{if !empty($rech)}&r={$rech}{/if}{if !empty($tag)}&tag={$tag}{/if}">suivant &rarr;</a>
+					</li>
+				</ul>
+			</div>
+	</body>
+</html>
